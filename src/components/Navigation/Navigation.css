@@ -1,0 +1,25 @@
+.nav_icon {
+  padding: .5rem;
+  font-size: 36px;
+  position: absolute;
+  right: 0;
+  cursor: pointer;
+}
+
+.navigation__list {
+  display: flex;
+  flex-direction: column;
+  margin-top: 40px;
+}
+
+.navigation__list a {
+  text-decoration: none;
+  color: black;
+  font-size: 1.25rem;
+  text-transform: uppercase;
+  padding: .5rem 1rem;
+}
+
+.hidden {
+  display: none;
+}
