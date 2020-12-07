@@ -1,0 +1,117 @@
+.clock {
+  width: 170px;
+  text-align: center;
+  padding: 10px;
+  position: relative;
+}
+
+.clock__name {
+  padding-bottom: 10px;
+}
+
+.clock__remove {
+  cursor: pointer;
+  width: 25px;
+  height: 25px;
+  position: absolute;
+  top: 0;
+  right: 0;
+  border: 1px solid black;
+  border-radius: 13px;
+  transform: translate(0, 50%);
+}
+.clock__remove:hover {
+  background-color: rgb(245, 245, 245);
+}
+
+
+.clock__wrapper {
+  height: 150px;
+  width: 150px;
+  background: #fff url(./img/clock.svg) no-repeat center;
+  background-size: contain;
+  position: relative;
+}
+
+.clock__center {
+  position: absolute;
+  width: 5%;
+  height: 5%;
+  background: #000;
+  border-radius: 50%;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
+}
+
+.clock__hours_container, .clock__minutes_container, .clock__seconds_container {
+  position: absolute;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 0;
+}
+
+.clock__hours_container {
+  animation: rotate 43200s linear infinite;
+}
+
+.clock__seconds_container {
+  animation: rotate 60s infinite steps(60);
+}
+
+.clock__hours {
+  height: 30%;
+  left: 48.75%;
+  position: absolute;
+  top: 20%;
+  transform-origin: 50% 100%;
+  width: 2.5%;
+}
+
+.clock__hours::after {
+  content: '';
+  position: absolute;
+  bottom: 0%;
+  left: 0;
+  z-index: 100;
+  background-color: black;
+  height: 100%;
+  width: 220%;
+  transform: translate(-30%);
+  clip-path: polygon(46% 0, 54% 0, 100% 50%, 75% 100%, 25% 100%, 0% 50%);
+}
+
+.clock__minutes {
+  height: 40%;
+  left: 49%;
+  position: absolute;
+  top: 10%;
+  transform-origin: 50% 100%;
+  width: 2%;
+}
+.clock__minutes::after {
+  content: '';
+  position: absolute;
+  bottom: 0%;
+  left: 0;
+  z-index: 100;
+  background-color: black;
+  height: 100%;
+  width: 200%;
+  transform: translate(-40%);
+  clip-path: polygon(46% 0, 54% 0, 100% 50%, 75% 100%, 25% 100%, 0% 50%);
+}
+
+.clock__seconds {
+  background: #000;
+  height: 50%;
+  left: 49.5%;
+  position: absolute;
+  top: 15%;
+  width: 1%;
+}
+
+@keyframes rotate {
+  100% { transform: rotate(360deg) }
+}

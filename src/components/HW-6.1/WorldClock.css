@@ -1,0 +1,40 @@
+.world_clock {
+  width: 60%;
+}
+
+.world_clock__inputs_wrapper {
+  display: flex;
+  justify-content: space-evenly;
+}
+
+.world_clock__list {
+  display: flex;
+  padding: .5rem 1rem;
+  flex-wrap: wrap;
+  justify-content: space-between;
+}
+
+.world_clock__input_heading {
+  padding: .5rem 0;
+  text-align: center;
+}
+
+.world_clock__input {
+  padding: .5rem 1rem;
+}
+
+.world_clock__add_btn {
+  text-decoration: none;
+  color: black;
+  padding: .5rem 1rem;
+  border: 1px solid black;
+  border-radius: 8px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  align-self: flex-end;
+}
+.world_clock__add_btn:hover {
+  cursor: pointer;
+  background-color: rgb(245, 245, 245);
+}
