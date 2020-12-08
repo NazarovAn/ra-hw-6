@@ -18,13 +18,15 @@ export default class Clock extends Component {
     const hours = date.getHours() + (date.getTimezoneOffset() / 60) + parseInt(this.props.offset, 10);
     const minutes = date.getMinutes();
     const seconds = date.getSeconds();
+
+    console.log(this.hoursHand.current);
     
-    this.hoursHand.current.style.rotate = `${ ( hours * 30 ) + ( minutes / 2 ) }deg`;    
-    this.minutesHand.current.style.rotate = `${ minutes * 6 }deg`;
-    this.secondsHand.current.style.rotate = `${ seconds * 6 }deg`;
+    this.hoursHand.current.style.transform = `rotate(${ ( hours * 30 ) + ( minutes / 2 ) }deg)`;    
+    this.minutesHand.current.style.transform = `rotate(${ minutes * 6 }deg)`;
+    this.secondsHand.current.style.transform = `rotate(${ seconds * 6 }deg)`;
 
     this.minutesTimeout = setTimeout(() => {
-      this.minutesHand.current.style.rotate = `${ minutes * 6 + 6 }deg`;
+      this.minutesHand.current.style.transform = `rotate(${ minutes * 6 + 6 }deg)`;
       this.minutesHand.current.style.animation = 'rotate 3600s infinite steps(60)';
     }, (60 - seconds) * 1000);
   }
