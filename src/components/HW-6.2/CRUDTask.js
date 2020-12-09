@@ -20,20 +20,20 @@ export default class CRUDTask extends Component {
   }
 
   async getNotes() {
-    const request = await fetch('http://localhost:7777/notes');
+    const request = await fetch(process.env.REACT_APP_CRUDE_NOTES);
     const result =  await request.json();
     this.setState({ notes: [...result] });
   }
 
   async addNote(value) {
-    await fetch('http://localhost:7777/notes', {
+    await fetch(process.env.REACT_APP_CRUDE_NOTES, {
       method: 'POST',
       body: JSON.stringify({ id:0, content: value }),
     })
   }
    
   async removeNote(id) {
-    await fetch(`http://localhost:7777/notes/${ id }`, {
+    await fetch(`${ process.env.REACT_APP_CRUDE_NOTES }/${ id }`, {
       method: 'DELETE',
     });
     this.getNotes();

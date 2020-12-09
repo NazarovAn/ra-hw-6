@@ -43,21 +43,19 @@ export default class Chat extends Component {
     this.setState((prev) => ({ ...prev, userId: newUserId, userName:newUserName, userColor:newUserColor  }));
     localStorage.setItem('user', JSON.stringify({ userId: newUserId, userName: newUserName, userColor:newUserColor }));
   }
-
-  // Тут мой вариант решения, как сделать ожидание комфортным для пользователя - отобразить список пользователей, подключенных к чату.
-  async getUsers() {
-    const req = await fetch('http://localhost:7777/users');
-    const resp = await req.json();
-    this.setState((prev) => ({ ...prev, users: [...resp] }));
-  }
   async setUser() {
-    fetch('http://localhost:7777/users', {
+    fetch(process.env.REACT_APP_CHAT_USERS, {
       method: 'POST',
       body: JSON.stringify({ userName: this.state.userName, userColor: this.state.userColor, userId: this.state.userId })
     })
   }
+  async getUsers() {
+    const req = await fetch(process.env.REACT_APP_CHAT_USERS);
+    const resp = await req.json();
+    this.setState((prev) => ({ ...prev, users: [...resp] }));
+  }
   async removeUser() {
-    fetch(`http://localhost:7777/users`, {
+    fetch(process.env.REACT_APP_CHAT_USERS, {
       method: 'POST',
       body: JSON.stringify({ userName: this.state.userName, remove: true })
     })
@@ -66,27 +64,13 @@ export default class Chat extends Component {
   getLastMessageId() {
     return this.state.messages.length ? this.state.messages[this.state.messages.length - 1].id : 0;
   }
-
-  startRefresh() {
-    this.refreshInterval = setInterval(() => {
-      this.getMessages(this.getLastMessageId());
-      this.getUsers();
-    }, 5000);
-  }
-
-  stopRefresh() {
-    clearInterval(this.refreshInterval);
-  }
-
-
   async getMessages(id) {
-    const req = await fetch(`http://localhost:7777/messages?from=${ id }`);
+    const req = await fetch(`${ process.env.REACT_APP_CHAT_MESSAGES }?from=${ id }`);
     const resp = await req.json();
     this.setState((prev) => ({ ...prev, messages: [...prev.messages, ...resp] }));
   }
-
   async postMessages() {
-    fetch('http://localhost:7777/messages', {
+    fetch(process.env.REACT_APP_CHAT_MESSAGES, {
       method: 'POST',
       body: JSON.stringify({
         id: 0,
@@ -100,9 +84,18 @@ export default class Chat extends Component {
   handleInput(event) {
     this.setState((prev) => ({ ...prev, inputValue: event.target.value }));
   }
-
   clearInput() {
     this.setState((prev) => ({ ...prev, inputValue: '' }));
+  }
+
+  startRefresh() {
+    this.refreshInterval = setInterval(() => {
+      this.getMessages(this.getLastMessageId());
+      this.getUsers();
+    }, 5000);
+  }
+  stopRefresh() {
+    clearInterval(this.refreshInterval);
   }
 
 
@@ -120,7 +113,6 @@ export default class Chat extends Component {
   scrollToBottom() {
     this.messagesListEnd.current.scrollIntoView();
   }
-
   submitListner = (evt) => {
     if (evt.key === 'Enter') {
       this.handleSubmit(evt);
@@ -152,7 +144,6 @@ export default class Chat extends Component {
       user: message.userId === this.state.userId ? true : false,
       color: messageUser ? messageUser.userColor : '#000',
     }
-
     return newProps;
   }
 
