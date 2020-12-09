@@ -18,8 +18,6 @@ export default class Clock extends Component {
     const hours = date.getHours() + (date.getTimezoneOffset() / 60) + parseInt(this.props.offset, 10);
     const minutes = date.getMinutes();
     const seconds = date.getSeconds();
-
-    console.log(this.hoursHand.current);
     
     this.hoursHand.current.style.transform = `rotate(${ ( hours * 30 ) + ( minutes / 2 ) }deg)`;    
     this.minutesHand.current.style.transform = `rotate(${ minutes * 6 }deg)`;
