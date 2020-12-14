@@ -4,33 +4,34 @@ import './Clock.css'
 export default class Clock extends Component {
   constructor(props) {
     super(props);
-    this.hoursHand = React.createRef();
-    this.minutesHand = React.createRef();
-    this.secondsHand = React.createRef();
+    this.state = {
+      now: Date.now()
+    }
+    this.updateInterval = null;
+  }
+  
+  getStyles() {
+    const date = new Date(this.state.now);
+    const seconds = date.getSeconds();
+    const minutes = date.getMinutes();
+    const hours = date.getHours() + (date.getTimezoneOffset() / 60) + parseInt(this.props.offset, 10);
+    return {
+      seconds: { transform: `rotate(${ seconds * 6 }deg)` },
+      minutes: { transform: `rotate(${ minutes * 6 }deg)` },
+      hours: { transform: `rotate(${ ( hours * 30 ) + ( minutes / 2 ) }deg)` }
+    };
+  }
+
+  updateTime() {
+    this.setState((prev) => ({ ...prev, now: Date.now() }));
   }
 
   componentDidMount() {
-    this.setClock();
-  }
-
-  setClock() {
-    const date = new Date();
-    const hours = date.getHours() + (date.getTimezoneOffset() / 60) + parseInt(this.props.offset, 10);
-    const minutes = date.getMinutes();
-    const seconds = date.getSeconds();
-    
-    this.hoursHand.current.style.transform = `rotate(${ ( hours * 30 ) + ( minutes / 2 ) }deg)`;    
-    this.minutesHand.current.style.transform = `rotate(${ minutes * 6 }deg)`;
-    this.secondsHand.current.style.transform = `rotate(${ seconds * 6 }deg)`;
-
-    this.minutesTimeout = setTimeout(() => {
-      this.minutesHand.current.style.transform = `rotate(${ minutes * 6 + 6 }deg)`;
-      this.minutesHand.current.style.animation = 'rotate 3600s infinite steps(60)';
-    }, (60 - seconds) * 1000);
+    this.updateInterval = setInterval(() => this.updateTime(), 1000);
   }
 
   componentWillUnmount() {
-    clearTimeout(this.minutesTimeout);
+    clearInterval(this.updateInterval);
   }
 
   render() {
@@ -40,13 +41,13 @@ export default class Clock extends Component {
         <div className="clock__remove" onClick={ () => this.props.onRemove(this.props.id) }>&#10008;</div>
         <div className="clock__wrapper">
           <div className="clock__center"/>
-          <div className="clock__hours_container" ref={ this.hoursHand }>
+          <div className="clock__hours_container" style={ this.getStyles().hours }>
             <div className="clock__hours"/>
           </div>
-          <div className="clock__minutes_container" ref={ this.minutesHand }>
+          <div className="clock__minutes_container" style={ this.getStyles().minutes }>
             <div className="clock__minutes"/>
           </div>
-          <div className="clock__seconds_container" ref={ this.secondsHand }>
+          <div className="clock__seconds_container" style={ this.getStyles().seconds }>
             <div className="clock__seconds"/>
           </div>
         </div>

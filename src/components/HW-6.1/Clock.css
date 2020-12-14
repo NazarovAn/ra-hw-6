@@ -52,14 +52,6 @@
   left: 0;
 }
 
-.clock__hours_container {
-  animation: rotate 43200s linear infinite;
-}
-
-.clock__seconds_container {
-  animation: rotate 60s infinite steps(60);
-}
-
 .clock__hours {
   height: 30%;
   left: 48.75%;
@@ -110,8 +102,4 @@
   position: absolute;
   top: 15%;
   width: 1%;
-}
-
-@keyframes rotate {
-  100% { transform: rotate(360deg) }
 }
