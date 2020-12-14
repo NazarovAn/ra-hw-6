@@ -1,22 +1,30 @@
-import React, { Component, createRef } from 'react'
+import React, { Component } from 'react'
 import Note from './Note'
 import './CRUDTask.css'
 
 export default class CRUDTask extends Component {
   constructor(props) {
     super(props);
-    this.state = { notes: [] };
-    this.input = createRef();
-    this.sendButton = createRef();
+    this.state = { 
+      notes: [],
+      inputValue: '',
+      isSendNote: false,
+    };
     this.getNotes = this.getNotes.bind(this);
     this.handleSubmit = this.handleSubmit.bind(this);
     this.removeNote = this.removeNote.bind(this);
     this.handleRefresh = this.handleRefresh.bind(this);
     this.clearInput = this.clearInput.bind(this);
+    this.handleInput = this.handleInput.bind(this);
+    this.animateSend = this.animateSend.bind(this);
+    this.sendAnimation = null;
   }
 
   componentDidMount() {
     this.getNotes();
+  }
+  componentWillUnmount() {
+    clearTimeout(this.sendAnimation);
   }
 
   async getNotes() {
@@ -39,22 +47,29 @@ export default class CRUDTask extends Component {
     this.getNotes();
   }
 
-  handleSubmit(event) {
-    event.preventDefault();
-    if (!this.input.current.value.length) {
-      return;
-    }
-    this.addNote(this.input.current.value);
-    this.getNotes();
-    this.clearInput();
-    this.sendButton.current.classList.add('note_send');
-    setTimeout(() => {
-      this.sendButton.current.classList.remove('note_send');  
-    }, 1000)
+  animateSend() {
+    this.setState((prev) => ({ ...prev, isSendNote: true }));
+    this.sendAnimation = setTimeout(() => {
+      this.setState((prev) => ({ ...prev, isSendNote: false }));
+    }, 1000);
   }
 
+  handleSubmit(event) {
+    event.preventDefault();
+    if (!this.state.inputValue.length) {
+      return;
+    }
+    this.addNote(this.state.inputValue);
+    this.animateSend();
+    this.getNotes();
+    this.clearInput();
+  }
+
+  handleInput(event) {
+    this.setState((prev) => ({ ...prev, inputValue: event.target.value }));
+  }
   clearInput() {
-    this.input.current.value = '';
+    this.setState((prev) => ({ ...prev, inputValue: '' }));
   }
 
   handleRefresh(event) {
@@ -81,8 +96,8 @@ export default class CRUDTask extends Component {
         </ul>
         <form className="crud_task__form">
           <div className="crud_task__form_header">New Note</div>
-          <textarea className="crud_task__textarea" ref={ this.input } />
-          <div className="crud_task__btn" ref={ this.sendButton } onClick={ this.handleSubmit }>&#10148;</div>
+          <textarea className="crud_task__textarea" value={ this.state.inputValue } onChange={ this.handleInput }/>
+          <div className={ `crud_task__btn ${ this.state.isSendNote ? 'note_send' : '' }` } onClick={ this.handleSubmit }>&#10148;</div>
         </form>
       </div>
     )
